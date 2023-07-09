@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+  
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+    <title>后台管理</title>
+  
+    <link href="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/twitter-bootstrap/5.1.3/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+  
+    <link href="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/layui/2.6.8/css/layui.min.css" type="text/css" rel="stylesheet" />
+  
+    <script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/3.5.1/jquery.min.js" type="application/javascript"></script>
+  
+    <script src="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/layui/2.6.8/layui.min.js" type="application/javascript"></script>
+  <style type="text/css">
+.ms-controller{visibility:hidden;}
+.hidden{display:none !important;}
+
+html,body{min-width:1024px;}
+
+.container-breadcrumb{background-color:#edf6fa;line-height:2.5rem;}
+.container-breadcrumb .breadcrumb{margin-bottom:0;}
+.breadcrumb-item b{color:#333}
+
+.tablelist{border:solid 1px #cbcbcb; width:100%; clear:both;}
+.tablelist th{background:url(/statics/admin-xxglxtjm/images/th.gif) repeat-x; height:34px; line-height:34px; border-bottom:solid 1px #b6cad2; text-indent:11px; text-align:left;padding:0;white-space:nowrap;min-width:3.5rem}
+.tablelist td{line-height:35px; text-indent:11px; border-right: dotted 1px #c7c7c7;padding:0;white-space:nowrap;}
+.tablelink{color:#056dae;}
+.tablelist tbody tr.odd{background:#f5f8fa;}
+.tablelist tbody tr:hover{background:#e5ebee;}
+
+</style>
+<style type="text/css">
+
+</style>
+<style type="text/css">
+
+</style>
+<style type="text/css">
+
+</style>
+<style type="text/css">
+.col-form-label{text-align:right;}
+</style>
+</head>
+
+  <body style="min-width:1024px;">
+      <div class="container-fluid container-breadcrumb">
+        <div class="row">
+          <div class="col">
+            <nav>
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                  <b>位置</b>
+                ：
+                  <a href="/admin/main.html">主功能面板</a>
+                </li>
+              
+                <li class="breadcrumb-item">
+                  <a href="/admin/ArticleType.html">分类管理</a>
+                </li>
+              
+                <li class="breadcrumb-item active">{{data.title}}</li>
+              </ol>
+            </nav>
+          </div>
+        
+          <!-- <div class="col-4 text-end">
+                    <a href="#" class="link-primary d-inline">新增</a>
+                </div> --></div>
+      </div>
+    
+      <div class="container-fluid container-welcome mt-3">
+        <div class="accordion" id="accordionExample">
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        基本信息
+                    </button>
+            </h2>
+          
+            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                <div class="mb-3 row">
+                  <label class="col-2 col-form-label">类别名称</label>
+                
+                  <div class="col">
+                      <input type="text" class="form-control" placeholder="请填写类别名称" ms-duplex="data.title" />
+                    </div>
+                
+</div>
+              
+                <div class="mb-3 row">
+                  <label class="col-2 col-form-label">上级分类</label>
+                
+                  <div class="col">
+                      <select class="form-select" ms-change="eventChangeTypeID($event)" ms-duplex="data.parent_id">
+                        <option value="">顶层菜单</option>
+                      
+                        <option ms-attr="{value: @el_1.type_id}" ms-class="getHiddenClassByType(@el_1.type_id)" ms-for="($index_1, @el_1) in data.typeTree">{{@el_1.title}}</option>
+                      </select>
+                    </div>
+                
+</div>
+              
+                <div class="mb-3 row">
+                  <label class="col-2 col-form-label">类别类型</label>
+                
+                  <div class="col">
+                        <div class="form-check form-check-inline" style="padding-top:0.4rem">
+                        <input class="form-check-input" type="radio" name="article_type_flag" id="inlineRadio0" value="0" ms-duplex="data.article_type_flag" />
+                        <label class="form-check-label" for="inlineRadio0" >首页</label>
+                        </div>
+                      <div class="form-check form-check-inline" style="padding-top:0.4rem">
+                        <input class="form-check-input" type="radio" name="article_type_flag" id="inlineRadio1" value="list_text" ms-duplex="data.article_type_flag" />
+                        <label class="form-check-label" for="inlineRadio1" >标题列表</label>
+                      </div>
+                      <div class="form-check form-check-inline" style="padding-top:0.4rem">
+                        <input class="form-check-input" type="radio" name="article_type_flag" id="inlineRadio2" value="list_image_cols" ms-duplex="data.article_type_flag" />
+                        <label class="form-check-label" for="inlineRadio2" >多列封面</label>
+                      </div>
+                      <div class="form-check form-check-inline" style="padding-top:0.4rem">
+                        <input class="form-check-input" type="radio" name="article_type_flag" id="inlineRadio3" value="list_image_rows" ms-duplex="data.article_type_flag" />
+                        <label class="form-check-label" for="inlineRadio3" >单行封面</label>
+                      </div>
+                      <div class="form-check form-check-inline" style="padding-top:0.4rem">
+                        <input class="form-check-input" type="radio" name="article_type_flag" id="inlineRadio4" value="list_image_text_cols" ms-duplex="data.article_type_flag" />
+                        <label class="form-check-label" for="inlineRadio4" >多列图文</label>
+                      </div>
+                      <div class="form-check form-check-inline" style="padding-top:0.4rem">
+                        <input class="form-check-input" type="radio" name="article_type_flag" id="inlineRadio5" value="list_image_text_rows" ms-duplex="data.article_type_flag" />
+                        <label class="form-check-label" for="inlineRadio5" >单行图文</label>
+                      </div>
+                    </div>
+                
+                </div>
+              
+                <div class="mb-3 row">
+                  <label class="col-2 col-form-label">排序序号</label>
+                
+                  <div class="col">
+                      <input type="text" class="form-control" ms-duplex="data.sort" />
+                    </div>
+                
+</div>
+              </div>
+            </div>
+          </div>
+        
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        其它信息
+                    </button>
+            </h2>
+          
+            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                <div class="mb-3 row">
+                  <label class="col-2 col-form-label">SEO关键词</label>
+                
+                  <div class="col">
+                      <input type="text" class="form-control" placeholder="搜索引擎抓取的关键词" ms-duplex="data.keyword" />
+                    </div>
+                
+</div>
+              
+                <div class="mb-3 row">
+                  <label class="col-2 col-form-label">SEO描述</label>
+                
+                  <div class="col">
+                      <textarea class="form-control" rows="3" placeholder="搜索引擎抓取的描述内容" ms-duplex="data.description"></textarea>
+                    </div>
+                
+</div>
+              
+                <div class="mb-3 row">
+                  <label class="col-2 col-form-label">启用状态</label>
+                
+                  <div class="col">
+                      <div class="form-check form-check-inline" style="padding-top:0.4rem">
+                        <input class="form-check-input" type="radio" name="show" id="inlineRadi001" value="1" ms-duplex="data.show" />
+                      
+                        <label class="form-check-label" for="inlineRadi001">启用</label>
+                      </div>
+                    
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="show" id="inlineRadi002" value="0" ms-duplex="data.show" />
+                      
+                        <label class="form-check-label" for="inlineRadi002">停用</label>
+                      </div>
+                    </div>
+                
+</div>
+              
+                <div class="mb-3 row">
+                  <label class="col-2 col-form-label">视图类型</label>
+                
+                  <div class="col">
+                      <div class="form-check form-check-inline" style="padding-top:0.4rem">
+                        <input class="form-check-input" type="radio" name="flag" value="0" id="data_flag_0" ms-duplex="data.flag" />
+                      
+                        <label class="form-check-label" for="data_flag_0">导航菜单</label>
+                      </div>
+                    
+                      <div class="form-check form-check-inline" style="padding-top:0.4rem">
+                        <input class="form-check-input" type="radio" name="flag" value="2" id="data_flag_2" ms-duplex="data.flag" />
+                      
+                        <label class="form-check-label" for="data_flag_2">banner横幅</label>
+                      </div>
+                    
+                      <div class="form-check form-check-inline" style="padding-top:0.4rem">
+                        <input class="form-check-input" type="radio" name="flag" value="3" id="data_flag_3" ms-duplex="data.flag" />
+                      
+                        <label class="form-check-label" for="data_flag_3">页面模块</label>
+                      </div>
+                    </div>
+                
+</div>
+              
+                <div class="mb-3 row">
+                  <label class="col-2 col-form-label">类别类型</label>
+                
+                  <div class="col">
+                    <div class="form-check form-check-inline" style="padding-top:0.4rem">
+                      <input class="form-check-input" type="radio" name="article_type_flag2" id="inlineRadio_o0" value="0" ms-duplex="data.article_type_flag" />
+                      <label class="form-check-label" for="inlineRadio_o0" >首页</label>
+                    </div>
+                      <div class="form-check form-check-inline" style="padding-top:0.4rem">
+                        <input class="form-check-input" type="radio" name="article_type_flag2" id="inlineRadio_o1" value="list_text" ms-duplex="data.article_type_flag" />
+                        <label class="form-check-label" for="inlineRadio_o1" >标题列表</label>
+                      </div>
+                      <div class="form-check form-check-inline" style="padding-top:0.4rem">
+                        <input class="form-check-input" type="radio" name="article_type_flag2" id="inlineRadio_o2" value="list_image_cols" ms-duplex="data.article_type_flag" />
+                        <label class="form-check-label" for="inlineRadio_o2" >多列封面</label>
+                      </div>
+                      <div class="form-check form-check-inline" style="padding-top:0.4rem">
+                        <input class="form-check-input" type="radio" name="article_type_flag2" id="inlineRadio_o3" value="list_image_rows" ms-duplex="data.article_type_flag" />
+                        <label class="form-check-label" for="inlineRadio_o3" >单行封面</label>
+                      </div>
+                      <div class="form-check form-check-inline" style="padding-top:0.4rem">
+                        <input class="form-check-input" type="radio" name="article_type_flag2" id="inlineRadio_o4" value="list_image_text_cols" ms-duplex="data.article_type_flag" />
+                        <label class="form-check-label" for="inlineRadio_o4" >多列图文</label>
+                      </div>
+                      <div class="form-check form-check-inline" style="padding-top:0.4rem">
+                        <input class="form-check-input" type="radio" name="article_type_flag2" id="inlineRadio_o5" value="list_image_text_rows" ms-duplex="data.article_type_flag" />
+                        <label class="form-check-label" for="inlineRadio_o5" >单行图文</label>
+                      </div>
+                    </div>
+                
+</div>
+              
+                <div class="mb-3 row">
+                  <label class="col-2 col-form-label">外链地址</label>
+                
+                  <div class="col">
+                      <input type="text" class="form-control" placeholder="如需要跳转到其它网站，复制链接到此处" ms-duplex="data.external_link" />
+                    </div>
+                
+</div>
+              
+                <div class="mb-3 row">
+                  <label class="col-2 col-form-label">每页大小</label>
+                
+                  <div class="col">
+                      <input type="text" class="form-control" placeholder="每页大小" ms-duplex="data.page_size" />
+                    </div>
+                
+</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        <div class="btn-toolbar pt-2" role="toolbar">
+          <div class="d-grid gap-2 col-2">
+            <button class="btn btn-primary" type="button" ms-click="eventClickSave()">保存</button>
+          </div>
+        </div>
+      </div>
+    
+    <script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/twitter-bootstrap/5.1.3/js/bootstrap.bundle.min.js" type="application/javascript"></script>
+  
+    <script src="https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/avalon.js/2.2.7/avalon.min.js" type="application/javascript"></script>
+  
+    <script type="text/javascript">
+
+    var localed = false;
+
+    function ajax(e) {
+        var t;
+        if (e.url || e.success && e.success({
+            state: -1,
+            message: "请求链接为空！"
+        }),
+        !/^http/.test(e.url || "")) {
+            //var i = this.apiOrigin;
+            //e.url = i + e.url
+        }
+        var n = {};
+        n["Access-Authorization"] = localStorage.getItem("Access-Authorization"),
+        n.Accept = "*/*",
+        e.headers = n,
+        e.xhrFields = {
+            withCredentials: !0
+        };
+        var s = e.success;
+        e.success = function(e, t, i) {
+            e.state - 1 && layer.msg(e.message || "服务器连接超时或服务器错误！"),
+            s && s(e, t, i)
+        }
+        ;
+        var r = e.error;
+        e.error = function(e) {
+            if (401 == e.status)
+                return localStorage.removeItem("Access-Authorization");
+            layer.msg("服务器连接超时或服务器错误！"),
+            r && r(e)
+        }
+        ,
+        $.ajax(e)
+    }
+
+    function getUrlKeyValue(name){
+        return (window.location.href.match(new RegExp(`(?<=${name}=)[^\?\&]+`)) || [''])[0];
+    }
+
+    function getPort(url, callback){
+        if(localed){
+            callback(url);
+            return;
+        }
+        $.ajax({
+            type: "GET",
+            url: "/api/server/port",
+            success: function (res) {
+                var origin = window.location.origin.replace(/:\d+$/,'');
+                if(res && res.data){
+                    callback(origin+':'+res.data+url);
+                    return;
+                }
+                layer.alert('登录失败，请检查网络设置！');
+            },
+            error: function (msg) {
+                localed = true;
+                callback(url)
+            }
+        });
+    }
+
+    function getCaptcha(callBack){
+        getPort('/api/captcha/create', function(url){
+            ajax({
+                type: "GET",
+                url: url,
+                success: function (res) {
+                    callBack(res.children[0].outerHTML)
+                }
+            });
+        })
+    }
+
+    function Pager() {
+        return {
+            page_index: 1,
+            page_size: 50,
+            page_count: 0,
+
+            page_prev: 1,
+            page_next: 1,
+            page_total: 0,
+            pages: [],
+        };
+    }
+
+    function getPager(page_index, size, count) {
+        const pageTotal =
+        parseInt((count / size).toString()) + (count % size ? 1 : 0);
+
+        var pager = {
+        page_index: page_index,
+        page_size: size,
+        page_count: count,
+        page_prev: page_index == 1 ? 1 : page_index - 1,
+        page_next: page_index == pageTotal ? pageTotal : page_index + 1,
+        page_total: pageTotal,
+        };
+
+        pager.pages = new Array(pageTotal)
+        .fill(1)
+        .map((key, index) => {
+            return {
+            page_index: index + 1,
+            page_index_name: index + 1,
+            page_active: "",
+            };
+        })
+        .filter((key, index) => {
+            if (index + 1 == page_index) {
+            key.page_active = "active";
+            return true;
+            }
+            if (index == 0) return true;
+            if (index + 1 == pageTotal) return true;
+
+            if (index + 4 >= page_index && index <= page_index) return true;
+            if (index - 4 <= page_index && index >= page_index) return true;
+            if (index + 5 == page_index || index - 5 == page_index) {
+            key.page_index_name = "···";
+            return true;
+            }
+            return false;
+        });
+
+        return pager;
+    }
+
+    function initController(settings, data) {
+
+        // 检查控制器编号
+        settings.$id || (settings.$id = `controller_${new Date().getTime()}`);
+
+        if (settings.container) {
+            layer.msg(`视图容器未设定！`);
+            return;
+        }
+
+        // 获取视图
+        const view = `<div ms-controller="${settings.$id}" class="${settings.$id} ${settings.class || ''}">${settings._template}</div>`;
+
+        // 检查容器状态
+        if(settings._template){
+            if (settings.fillType === 'top') {
+                $(settings.container || '').html(view);
+            }
+            else {
+                $(settings.container).children().last().addClass('hidden');
+                $(settings.container).append(view);
+            }
+        }
+
+        settings.disabledFormControl = (dom, isCancel) => {
+            if (isCancel) {
+                $(dom).removeAttr('disabled');
+                return;
+            }
+            $(dom).attr('disabled', "disabled");
+        }
+
+        avalon.config.debug = true;
+        avalon.ready(() => {
+            const vm = avalon.define(settings).onload(data || undefined);
+            let vmTarget = $(`[ms-controller="${settings.$id}"]:eq(0)`).get(0);
+            avalon.scan(vmTarget, vm, undefined);
+        });
+    }
+
+    function toView(url){
+        window.location.href = url;
+    }
+    
+    function toAdminLogin(){
+        toView('/adminLogin');
+    }
+
+    function toAdminIndex(){
+        toView('/adminIndex');
+    }
+
+    function loginOut() {
+        getPort('/api/user/logout', function(url){
+            ajax({
+                type: "post",
+                url: url,
+                success: function (res) {
+                    localStorage.removeItem('Access-Authorization');
+                    toAdminLogin();
+                }
+            });
+        })
+    }
+    
+
+    (()=>{
+        const auth = localStorage.getItem('Access-Authorization');
+        if(auth){
+            if(/adminLogin/.test(window.location.href)){
+                toAdminIndex();
+            }
+        }
+        else{
+            if(!/adminLogin/.test(window.location.href)){
+                toAdminLogin();
+            }
+        }
+    })();
+    
+</script>
+  
+      <script type="text/javascript">
+function initArticleType(types, parent_id, space, show, selectSort, type_id) {
+    selectSort = selectSort || 0;
+    type_id = type_id || '';
+    types.map(item => {
+        if (item.parent_id == parent_id) {
+            item.selectSort = selectSort++;
+            item.paddingLeft = (space.length * 15) + 'px';
+            if (item.type_id != type_id) {
+                item.title = space + item.title;
+                //item.show = show;
+                initArticleType(types, item.type_id, space + '--- ', show, selectSort, type_id);
+            }
+            else {
+                //item.show = 0;
+                initArticleType(types, item.type_id, space + '--- ', 0, selectSort, type_id);
+            }
+        }
+    })
+}
+
+function getArticleTypeAll(callback, curr_type_id){
+    getPort('/api/article/getPagingArticleType', (url)=>{
+        ajax({
+            method: 'get',
+            url: url,
+            data: {
+                index: 1,
+                size: 1000
+            },
+            success: (res, state, response) => {
+                if (res && res.data) {
+                    const datas = JSON.parse(JSON.stringify(res.data));
+                    initArticleType(datas, '', '', 1, 0, curr_type_id || '');
+                    const types = datas.sort((a, b) => a.selectSort < b.selectSort ? -1 : 1);
+                    callback(res.data, types);
+                }
+                else{
+                    callback([],[]);
+                }
+            }
+        })
+    });
+}
+</script>
+    
+      <script type="text/javascript">
+            (()=>{
+                $('body').attr('ms-controller','root');
+                $('body').addClass('ms-controller');
+
+                initController({
+                    $id: 'root',
+                    data: {
+                        types: [],
+                        typeTree:[],
+                        article_type_flags: [],
+
+                        id: '',
+                        type_id: '',
+                        parent_id: '',
+                        parent_top_id: '',
+                        title: '',
+                        keyword: '',
+                        description: '',
+                        show:  1,
+                        sort:  0,
+                        template: '',
+                        article_type_flag: '1',
+                        external_link:  '',
+
+                        flag: 0,
+                        page_size: 22
+                    },
+                    onload: function() {
+                        this.getArticleTypeAll();
+                        this.getPageAll();
+                    },
+                    getArticleTypeAll: function() {
+                        getArticleTypeAll((datas,dataTree)=>{
+                            this.data.types = datas;
+                            if(dataTree){
+                                this.data.typeTree = [];
+                                this.data.typeTree = dataTree.filter(p=>p.flag<1).sort((a,b)=>a.sort<b.sort?-1:1);
+
+                                
+                                const parent_id = this.data.parent_id;
+                                this.data.parent_id = '';
+                                this.data.parent_id = parent_id;
+
+                                if (/^0$/.test(this.data.sort.toString())) {
+                                    if (this.data.types.length == 0) {
+                                        this.data.sort = 1000;
+                                    }
+                                    else {
+                                        this.eventChangeTypeID({ target: { value: '' } });
+                                    }
+                                }
+
+                                const cur_type_id = getUrlKeyValue('type_id');
+                                datas.map(item=>{
+                                    if(item.type_id == cur_type_id){
+                                        this.data.id = item.id;
+                                        this.data.type_id = item.type_id;
+                                        this.data.parent_id = item.parent_id;
+                                        this.data.parent_top_id = item.parent_top_id;
+                                        this.data.title = item.title;
+                                        this.data.keyword = item.keyword;
+                                        this.data.description = item.description;
+                                        this.data.show = item.show;
+                                        this.data.sort = item.sort;
+                                        this.data.flag = item.flag;
+                                        this.data.template = item.template;
+                                        this.data.article_type_flag = item.article_type_flag||item.type_flag||item.flag_type;
+                                        this.data.external_link = item.external_link;
+                                        this.data.page_size = item.page_size || 22;
+                                    }
+                                })
+                            }
+                        })
+                    },
+                    getPageAll: function() {
+
+                    },
+                    eventChangeTypeID(e) {
+                        const select = e.target;
+                        const pmenu = this.data.types.filter(item => item.type_id == select.value);
+                        const menus = this.data.types.filter(item => item.parent_id == select.value).sort((a, b) => { return a.sort > b.sort ? -1 : 0 });
+                        const cmenu = menus.filter(item => item.type_id == this.data.type_id)
+                        if (cmenu && cmenu.length) {
+                            this.data.sort = cmenu[0].sort;
+                            this.data.parent_top_id = pmenu[0].parent_top_id;
+                        }
+                        else if (select.value) {
+                            this.data.sort = menus && menus.length ? (menus[0].sort - 1 + 2) : pmenu[0].sort.toString().replace(/\d{2}$/, '01');
+                            this.data.parent_top_id = pmenu[0].parent_top_id;
+                        }
+                        else {
+                            this.data.sort = menus && menus.length ? (menus[0].sort.toString().replace(/^\d{2}/, (str) => (str - 1 + 2).toString())) : '1000'
+                            this.data.parent_top_id = '';
+                        }
+                    },
+                    getHiddenClassByType(type_id) {
+                        if (!this.data.type_id) return '';
+                        let className = type_id == this.data.type_id ? 'hidden' : '';
+                        this.data.types.map(item => {
+                            if (item.type_id == type_id) {
+                                if (item.parent_id == this.data.type_id) {
+                                    className = 'hidden';
+                                }
+                                this.data.types.map(item2 => {
+                                    if (item2.type_id == item.parent_id) {
+                                        if (item2.parent_id == this.data.type_id) {
+                                            className = 'hidden';
+                                        }
+                                        this.data.types.map(item3 => {
+                                            if (item3.type_id == item2.parent_id) {
+                                                if (item3.parent_id == this.data.type_id) {
+                                                    className = 'hidden';
+                                                }
+                                                this.data.types.map(item4 => {
+                                                    if (item4.type_id == item3.parent_id) {
+                                                        if (item4.parent_id == this.data.type_id) {
+                                                            className = 'hidden';
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                        });
+
+                                    }
+                                });
+                            }
+                        })
+                        return className;
+                    },
+                    eventClickSave(e) {
+                        e && this.disabledFormControl(e.target);
+                        getPort('/api/article/addOrUpdateArticleType', (url) => {
+                            ajax({
+                                method: 'post',
+                                url: url,
+                                data: {
+                                    id: this.data.id,
+                                    type_id: this.data.type_id,
+                                    parent_id: this.data.parent_id,
+                                    parent_top_id: this.data.parent_top_id,
+                                    title: this.data.title,
+                                    keyword: this.data.keyword,
+                                    description: this.data.description,
+                                    language: this.data.language || 'zh-Hans',
+                                    show: this.data.show,
+                                    flag: this.data.flag,
+                                    sort: this.data.sort,
+                                    template: this.data.template,
+                                    article_type_flag: this.data.article_type_flag,
+                                    external_link: this.data.external_link,
+                                    page_size: this.data.page_size
+                                },
+                                success: (res, state, response) => {
+                                    if (res.state == -1) {
+                                        this.disabledFormControl(e.target, true);
+                                        return;
+                                    }
+                                    window.location.href = '/admin/ArticleType.html';
+                                }
+                            })
+                        });
+                    }
+                });
+            })()
+        </script>
+    </body>
+
+</html>
+

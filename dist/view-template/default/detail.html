@@ -1,0 +1,15 @@
+<!-- @Register "master" to <v:master>  -->
+<!-- @Register "header" to <u:header>  -->
+<!-- @Register "footer" to <u:footer>  -->
+    <v:master>
+        <master:bodyer>
+          <u:header></u:header>
+          <div class="container">
+            {%#news%}
+            {%content%}
+            {%/news%}
+          </div>
+          <u:footer></u:footer>
+        </master:bodyer>
+      </v:master>
+      

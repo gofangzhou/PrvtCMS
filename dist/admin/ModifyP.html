@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+  
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+    <title>后台管理</title>
+  
+    <link href="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/twitter-bootstrap/5.1.3/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+  
+    <link href="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/layui/2.6.8/css/layui.min.css" type="text/css" rel="stylesheet" />
+  
+    <script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/3.5.1/jquery.min.js" type="application/javascript"></script>
+  
+    <script src="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/layui/2.6.8/layui.min.js" type="application/javascript"></script>
+  <style type="text/css">
+.ms-controller{visibility:hidden;}
+.hidden{display:none !important;}
+
+html,body{min-width:1024px;}
+
+.container-breadcrumb{background-color:#edf6fa;line-height:2.5rem;}
+.container-breadcrumb .breadcrumb{margin-bottom:0;}
+.breadcrumb-item b{color:#333}
+
+.tablelist{border:solid 1px #cbcbcb; width:100%; clear:both;}
+.tablelist th{background:url(/statics/admin-xxglxtjm/images/th.gif) repeat-x; height:34px; line-height:34px; border-bottom:solid 1px #b6cad2; text-indent:11px; text-align:left;padding:0;white-space:nowrap;min-width:3.5rem}
+.tablelist td{line-height:35px; text-indent:11px; border-right: dotted 1px #c7c7c7;padding:0;white-space:nowrap;}
+.tablelink{color:#056dae;}
+.tablelist tbody tr.odd{background:#f5f8fa;}
+.tablelist tbody tr:hover{background:#e5ebee;}
+
+</style>
+<style type="text/css">
+
+</style>
+<style type="text/css">
+.col-form-label{text-align:right;}
+</style>
+<style type="text/css">
+
+</style>
+</head>
+
+  <body style="min-width:1024px;">
+      <div class="container-fluid container-breadcrumb">
+        <div class="row">
+          <div class="col">
+            <nav>
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                  <b>位置</b>
+                ：
+                  <a href="/admin/main.html">主功能面板</a>
+                </li>
+              
+                <li class="breadcrumb-item active">修改密码</li>
+              </ol>
+            </nav>
+          </div>
+        </div>
+      </div>
+    
+      <div class="container-fluid container-welcome mt-3">
+        <div class="accordion" id="accordionExample">
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        基本信息
+                    </button>
+            </h2>
+          
+            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                <div class="mb-3 row">
+                  <label class="col-2 col-form-label">原始密码</label>
+                
+                  <div class="col">
+                      <input type="password" class="form-control" placeholder="请填写原始密码" ms-duplex="data.originalPassword" />
+                    </div>
+                
+</div>
+              
+                <div class="mb-3 row">
+                  <label class="col-2 col-form-label">新密码</label>
+                
+                  <div class="col">
+                      <input type="password" class="form-control" placeholder="请填写新密码" ms-duplex="data.newPassword" />
+                    </div>
+                
+</div>
+              
+                <div class="mb-3 row">
+                  <label class="col-2 col-form-label">确认密码</label>
+                
+                  <div class="col">
+                      <input type="password" class="form-control" placeholder="请填写确认密码" ms-duplex="data.confirmPassword" />
+                    </div>
+                
+</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        <div class="btn-toolbar pt-2" role="toolbar">
+          <div class="d-grid gap-2 col-2">
+            <button class="btn btn-primary" type="button" ms-click="eventClickSave()">保存</button>
+          </div>
+        </div>
+      </div>
+    
+    <script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/twitter-bootstrap/5.1.3/js/bootstrap.bundle.min.js" type="application/javascript"></script>
+  
+    <script src="https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/avalon.js/2.2.7/avalon.min.js" type="application/javascript"></script>
+  
+    <script type="text/javascript">
+
+    var localed = false;
+
+    function ajax(e) {
+        var t;
+        if (e.url || e.success && e.success({
+            state: -1,
+            message: "请求链接为空！"
+        }),
+        !/^http/.test(e.url || "")) {
+            //var i = this.apiOrigin;
+            //e.url = i + e.url
+        }
+        var n = {};
+        n["Access-Authorization"] = localStorage.getItem("Access-Authorization"),
+        n.Accept = "*/*",
+        e.headers = n,
+        e.xhrFields = {
+            withCredentials: !0
+        };
+        var s = e.success;
+        e.success = function(e, t, i) {
+            e.state - 1 && layer.msg(e.message || "服务器连接超时或服务器错误！"),
+            s && s(e, t, i)
+        }
+        ;
+        var r = e.error;
+        e.error = function(e) {
+            if (401 == e.status)
+                return localStorage.removeItem("Access-Authorization");
+            layer.msg("服务器连接超时或服务器错误！"),
+            r && r(e)
+        }
+        ,
+        $.ajax(e)
+    }
+
+    function getUrlKeyValue(name){
+        return (window.location.href.match(new RegExp(`(?<=${name}=)[^\?\&]+`)) || [''])[0];
+    }
+
+    function getPort(url, callback){
+        if(localed){
+            callback(url);
+            return;
+        }
+        $.ajax({
+            type: "GET",
+            url: "/api/server/port",
+            success: function (res) {
+                var origin = window.location.origin.replace(/:\d+$/,'');
+                if(res && res.data){
+                    callback(origin+':'+res.data+url);
+                    return;
+                }
+                layer.alert('登录失败，请检查网络设置！');
+            },
+            error: function (msg) {
+                localed = true;
+                callback(url)
+            }
+        });
+    }
+
+    function getCaptcha(callBack){
+        getPort('/api/captcha/create', function(url){
+            ajax({
+                type: "GET",
+                url: url,
+                success: function (res) {
+                    callBack(res.children[0].outerHTML)
+                }
+            });
+        })
+    }
+
+    function Pager() {
+        return {
+            page_index: 1,
+            page_size: 50,
+            page_count: 0,
+
+            page_prev: 1,
+            page_next: 1,
+            page_total: 0,
+            pages: [],
+        };
+    }
+
+    function getPager(page_index, size, count) {
+        const pageTotal =
+        parseInt((count / size).toString()) + (count % size ? 1 : 0);
+
+        var pager = {
+        page_index: page_index,
+        page_size: size,
+        page_count: count,
+        page_prev: page_index == 1 ? 1 : page_index - 1,
+        page_next: page_index == pageTotal ? pageTotal : page_index + 1,
+        page_total: pageTotal,
+        };
+
+        pager.pages = new Array(pageTotal)
+        .fill(1)
+        .map((key, index) => {
+            return {
+            page_index: index + 1,
+            page_index_name: index + 1,
+            page_active: "",
+            };
+        })
+        .filter((key, index) => {
+            if (index + 1 == page_index) {
+            key.page_active = "active";
+            return true;
+            }
+            if (index == 0) return true;
+            if (index + 1 == pageTotal) return true;
+
+            if (index + 4 >= page_index && index <= page_index) return true;
+            if (index - 4 <= page_index && index >= page_index) return true;
+            if (index + 5 == page_index || index - 5 == page_index) {
+            key.page_index_name = "···";
+            return true;
+            }
+            return false;
+        });
+
+        return pager;
+    }
+
+    function initController(settings, data) {
+
+        // 检查控制器编号
+        settings.$id || (settings.$id = `controller_${new Date().getTime()}`);
+
+        if (settings.container) {
+            layer.msg(`视图容器未设定！`);
+            return;
+        }
+
+        // 获取视图
+        const view = `<div ms-controller="${settings.$id}" class="${settings.$id} ${settings.class || ''}">${settings._template}</div>`;
+
+        // 检查容器状态
+        if(settings._template){
+            if (settings.fillType === 'top') {
+                $(settings.container || '').html(view);
+            }
+            else {
+                $(settings.container).children().last().addClass('hidden');
+                $(settings.container).append(view);
+            }
+        }
+
+        settings.disabledFormControl = (dom, isCancel) => {
+            if (isCancel) {
+                $(dom).removeAttr('disabled');
+                return;
+            }
+            $(dom).attr('disabled', "disabled");
+        }
+
+        avalon.config.debug = true;
+        avalon.ready(() => {
+            const vm = avalon.define(settings).onload(data || undefined);
+            let vmTarget = $(`[ms-controller="${settings.$id}"]:eq(0)`).get(0);
+            avalon.scan(vmTarget, vm, undefined);
+        });
+    }
+
+    function toView(url){
+        window.location.href = url;
+    }
+    
+    function toAdminLogin(){
+        toView('/admin/login.html');
+    }
+
+    function toAdminIndex(){
+        toView('/admin/main.html');
+    }
+
+    function loginOut() {
+        getPort('/api/user/logout', function(url){
+            ajax({
+                type: "post",
+                url: url,
+                success: function (res) {
+                    localStorage.removeItem('Access-Authorization');
+                    toAdminLogin();
+                }
+            });
+        })
+    }
+    
+
+    (()=>{
+        const auth = localStorage.getItem('Access-Authorization');
+        if(auth){
+            if(/login.html/.test(window.location.href)){
+                toAdminIndex();
+            }
+        }
+        else{
+            if(!/login.html/.test(window.location.href)){
+                toAdminLogin();
+            }
+        }
+    })();
+    
+</script>
+  
+      <script type="text/javascript">
+            (()=>{
+                $('body').attr('ms-controller','root');
+                $('body').addClass('ms-controller');
+
+                initController({
+                    $id: 'root',
+                    data: {
+                        originalPassword: '',
+                        newPassword: '',
+                        confirmPassword: ''
+                    },
+                    onload: function() {
+
+                    },
+                    eventClickSave(e) {
+                        if(this.data.newPassword != this.data.confirmPassword){
+                            return layer.msg('两次密码输入不一致!');
+                        }
+                        e && this.disabledFormControl(e.target);                        
+                        getPort('/api/user/modifyPass', (url) => {
+                            ajax({
+                                method: 'post',
+                                url: url,
+                                data: {
+                                    originalPassword: this.data.originalPassword,
+                                    newPassword: this.data.newPassword,
+                                },
+                                success: (res, state, response) => {
+                                    if (res.state == -1) {
+                                        this.disabledFormControl(e.target, true);
+                                        return;
+                                    }
+                                    window.location.href = '/admin/main.html';
+                                }
+                            })
+                        });
+                    }
+                });
+            })()
+        </script>
+    </body>
+
+</html>
+

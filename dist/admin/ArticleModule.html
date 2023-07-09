@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+  
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+    <title>后台管理</title>
+  
+    <link href="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/twitter-bootstrap/5.1.3/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+  
+    <link href="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/layui/2.6.8/css/layui.min.css" type="text/css" rel="stylesheet" />
+  
+    <script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/3.5.1/jquery.min.js" type="application/javascript"></script>
+  
+    <script src="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/layui/2.6.8/layui.min.js" type="application/javascript"></script>
+  <style type="text/css">
+.ms-controller{visibility:hidden;}
+.hidden{display:none !important;}
+
+html,body{min-width:1024px;}
+
+.container-breadcrumb{background-color:#edf6fa;line-height:2.5rem;}
+.container-breadcrumb .breadcrumb{margin-bottom:0;}
+.breadcrumb-item b{color:#333}
+
+.tablelist{border:solid 1px #cbcbcb; width:100%; clear:both;}
+.tablelist th{background:url(/statics/admin-xxglxtjm/images/th.gif) repeat-x; height:34px; line-height:34px; border-bottom:solid 1px #b6cad2; text-indent:11px; text-align:left;padding:0;white-space:nowrap;min-width:3.5rem}
+.tablelist td{line-height:35px; text-indent:11px; border-right: dotted 1px #c7c7c7;padding:0;white-space:nowrap;}
+.tablelink{color:#056dae;}
+.tablelist tbody tr.odd{background:#f5f8fa;}
+.tablelist tbody tr:hover{background:#e5ebee;}
+
+</style>
+<style type="text/css">
+
+</style>
+<style type="text/css">
+
+</style>
+<style type="text/css">
+
+</style>
+<style type="text/css">
+html,body{height:100%;}
+.container-content{width:calc(100% + 1.5rem);margin-left:-0.8rem;}
+.container-breadcrumb{background-color:#edf6fa;line-height:2.5rem;}
+.container-breadcrumb .breadcrumb{margin-bottom:0;}
+.breadcrumb-item b{color:#333}
+.left-menu .d-grid button{border-radius:0;background:url(/statics/admin-xxglxtjm/images/lefttop.gif) repeat !important;text-align:left;line-height:1.7rem;border:none;}
+@media (min-width:768px){
+    .container-box{height: calc(100% - 2.5rem);}
+    .container-box>.row,
+    .container-box>.row>div{height:100%;}
+    .col-menu-type{border-right:1px solid #dddddd;position:relative;}
+    .left-menu{position:absolute;overflow: auto;left:0;top:0;right:-0.1rem;bottom:1rem;}
+    .col-menu-type{width:260px;}
+}
+
+.list-group-item.active{background-color:#a1b6be;border-color:#a1b6be;}
+
+
+.i_d_block{display:block !important;}
+</style>
+</head>
+
+  <body style="min-width:1024px;">
+      <div class="container-fluid container-box">
+        <div class="row">
+          <div class="col-2 col-sm-2 col-menu-type">
+            <div class="left-menu">
+              <div class="d-grid">
+                <button class="btn btn-primary" type="button" onclick="$('#menu_list').toggleClass('i_d_block')">
+                  <img src="/statics/admin-xxglxtjm/images/leftico.png" style="margin-right:0.5rem;" />
+                 分类列表
+                            </button>
+              </div>
+            
+              <div class="list-group" id="menu_list">
+                <button type="button" class="list-group-item list-group-item-action " aria-current="true" ms-for="($index_1, @el_1) in data.typeTree" ms-click="getArticle(@el_1.type_id)" ms-class="@el_1.type_id == data.type_id ? 'active' : ''">
+                  <img src="/statics/admin-xxglxtjm/images/list.gif" style="margin-right:0.5rem;" ms-css="{opacity: (@el_1.parent_id?'0':'1')}" />
+                 {{@el_1.title}}
+                            </button>
+              </div>
+            </div>
+          </div>
+        
+          <div class="col">
+            <div class="container-fluid container-content container-breadcrumb">
+              <nav>
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item">
+                    <b>位置</b>
+                  ：
+                    <a href="/admin/main.html">主功能面板</a>
+                  </li>
+                
+                  <li class="breadcrumb-item active"><a href="/admin/ArticleTypeModule.html">banner | 模块管理</a></li>
+                
+                  <li class="breadcrumb-item active">{{getArticleTypeName(data.type_id)}}</li>
+                </ol>
+              </nav>
+            </div>
+          
+            <div class="container-fluid container-content mt-3">
+              <div class="row">
+                <div class="col col-12 col-md-3 col-lg-2">
+                  <div class="btn-toolbar pb-2" role="toolbar">
+                    <div class="btn-group me-2" role="group" aria-label="Second group">
+                      <button type="button" class="btn btn-light" ms-click="toArticleContent()">
+                        <img src="/statics/admin-xxglxtjm/images/t01.png" />
+                      
+                                            添加
+                                        </button>
+                    </div>
+                  </div>
+                </div>
+              
+                <div class="col col-12 col-md-9 col-lg-10">
+                  <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-end">
+                      <li class="page-item">
+                        <a class="page-link" ms-click="pageGo(data.articlePagination.page_prev)">&lt;</a>
+                      </li>
+                    
+                      <li class="page-item" ms-for="($index, data) in data.articlePagination.pages" ms-click="pageGo(data.page_index)" ms-class="data.page_active">
+                        <a class="page-link" href="#">{{data.page_index_name}}</a>
+                      </li>
+                    
+                      <li class="page-item">
+                        <a class="page-link" ms-click="pageGo(data.articlePagination.page_next)">&gt;</a>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
+              </div>
+            
+              <div class="table-responsive">
+                <table class="table tablelist">
+                  <thead>
+                    <tr>
+                      <th style="width:3.5rem;">序号</th>
+                    
+                      <th>内容标题</th>
+                    
+                      <th>内容类别</th>
+                    
+                      <th style="width:10rem;">发布时间</th>
+                    
+                      <th style="width:25%;">是否启用</th>
+                    
+                      <th style="width:6rem;">操作</th>
+                    </tr>
+                  </thead>
+                
+                  <tbody id="grid_tbody">
+                    <tr ms-class="$index_1 % 2 == 1 ? 'odd':''" ms-for="($index_1, @el_1) in data.articles" ms-css="{color: @el_1.show == 1 ? '#000' : '#aeaeae'}">
+                      <td>{{$index_1 + 1}}</td>
+                    
+                      <td>
+                        <a class="tablelink" ms-css="{color: @el_1.show == 1 ? '' : '#aeaeae'}" style="cursor:pointer;" ms-click="toArticleContent(@el_1)">{{@el_1.title}}</a>
+                      </td>
+                    
+                      <td>{{getArticleTypeName(@el_1.type_id)}}</td>
+                    
+                      <td>{{@el_1.publish_datetime}}</td>
+                    
+                      <td>{{@el_1.show == 1 ? '启用' : '停用'}}</td>
+                    
+                      <td>
+                        <a href="#" ms-css="{color: @el_1.show == 1 ? '' : '#aeaeae'}" class="link-primary d-inline" ms-click="toArticleContent(@el_1)">编辑</a>
+                      
+                        <a href="#" ms-css="{color: @el_1.show == 1 ? '' : '#aeaeae'}" class="link-danger  d-inline" ms-click="eventClickDel(e, @el_1)" style="margin-left:1rem;">删除</a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            
+              <div ms-if="data.articles.length == 0" class="text-center">暂无数据</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+    <script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/twitter-bootstrap/5.1.3/js/bootstrap.bundle.min.js" type="application/javascript"></script>
+  
+    <script src="https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/avalon.js/2.2.7/avalon.min.js" type="application/javascript"></script>
+  
+    <script type="text/javascript">
+
+    var localed = false;
+
+    function ajax(e) {
+        var t;
+        if (e.url || e.success && e.success({
+            state: -1,
+            message: "请求链接为空！"
+        }),
+        !/^http/.test(e.url || "")) {
+            //var i = this.apiOrigin;
+            //e.url = i + e.url
+        }
+        var n = {};
+        n["Access-Authorization"] = localStorage.getItem("Access-Authorization"),
+        n.Accept = "*/*",
+        e.headers = n,
+        e.xhrFields = {
+            withCredentials: !0
+        };
+        var s = e.success;
+        e.success = function(e, t, i) {
+            e.state - 1 && layer.msg(e.message || "服务器连接超时或服务器错误！"),
+            s && s(e, t, i)
+        }
+        ;
+        var r = e.error;
+        e.error = function(e) {
+            if (401 == e.status)
+                return localStorage.removeItem("Access-Authorization");
+            layer.msg("服务器连接超时或服务器错误！"),
+            r && r(e)
+        }
+        ,
+        $.ajax(e)
+    }
+
+    function getUrlKeyValue(name){
+        return (window.location.href.match(new RegExp(`(?<=${name}=)[^\?\&]+`)) || [''])[0];
+    }
+
+    function getPort(url, callback){
+        if(localed){
+            callback(url);
+            return;
+        }
+        $.ajax({
+            type: "GET",
+            url: "/api/server/port",
+            success: function (res) {
+                var origin = window.location.origin.replace(/:\d+$/,'');
+                if(res && res.data){
+                    callback(origin+':'+res.data+url);
+                    return;
+                }
+                layer.alert('登录失败，请检查网络设置！');
+            },
+            error: function (msg) {
+                localed = true;
+                callback(url)
+            }
+        });
+    }
+
+    function getCaptcha(callBack){
+        getPort('/api/captcha/create', function(url){
+            ajax({
+                type: "GET",
+                url: url,
+                success: function (res) {
+                    callBack(res.children[0].outerHTML)
+                }
+            });
+        })
+    }
+
+    function Pager() {
+        return {
+            page_index: 1,
+            page_size: 50,
+            page_count: 0,
+
+            page_prev: 1,
+            page_next: 1,
+            page_total: 0,
+            pages: [],
+        };
+    }
+
+    function getPager(page_index, size, count) {
+        const pageTotal =
+        parseInt((count / size).toString()) + (count % size ? 1 : 0);
+
+        var pager = {
+        page_index: page_index,
+        page_size: size,
+        page_count: count,
+        page_prev: page_index == 1 ? 1 : page_index - 1,
+        page_next: page_index == pageTotal ? pageTotal : page_index + 1,
+        page_total: pageTotal,
+        };
+
+        pager.pages = new Array(pageTotal)
+        .fill(1)
+        .map((key, index) => {
+            return {
+            page_index: index + 1,
+            page_index_name: index + 1,
+            page_active: "",
+            };
+        })
+        .filter((key, index) => {
+            if (index + 1 == page_index) {
+            key.page_active = "active";
+            return true;
+            }
+            if (index == 0) return true;
+            if (index + 1 == pageTotal) return true;
+
+            if (index + 4 >= page_index && index <= page_index) return true;
+            if (index - 4 <= page_index && index >= page_index) return true;
+            if (index + 5 == page_index || index - 5 == page_index) {
+            key.page_index_name = "···";
+            return true;
+            }
+            return false;
+        });
+
+        return pager;
+    }
+
+    function initController(settings, data) {
+
+        // 检查控制器编号
+        settings.$id || (settings.$id = `controller_${new Date().getTime()}`);
+
+        if (settings.container) {
+            layer.msg(`视图容器未设定！`);
+            return;
+        }
+
+        // 获取视图
+        const view = `<div ms-controller="${settings.$id}" class="${settings.$id} ${settings.class || ''}">${settings._template}</div>`;
+
+        // 检查容器状态
+        if(settings._template){
+            if (settings.fillType === 'top') {
+                $(settings.container || '').html(view);
+            }
+            else {
+                $(settings.container).children().last().addClass('hidden');
+                $(settings.container).append(view);
+            }
+        }
+
+        settings.disabledFormControl = (dom, isCancel) => {
+            if (isCancel) {
+                $(dom).removeAttr('disabled');
+                return;
+            }
+            $(dom).attr('disabled', "disabled");
+        }
+
+        avalon.config.debug = true;
+        avalon.ready(() => {
+            const vm = avalon.define(settings).onload(data || undefined);
+            let vmTarget = $(`[ms-controller="${settings.$id}"]:eq(0)`).get(0);
+            avalon.scan(vmTarget, vm, undefined);
+        });
+    }
+
+    function toView(url){
+        window.location.href = url;
+    }
+    
+    function toAdminLogin(){
+        toView('/admin/login.html');
+    }
+
+    function toAdminIndex(){
+        toView('/admin/main.html');
+    }
+
+    function loginOut() {
+        getPort('/api/user/logout', function(url){
+            ajax({
+                type: "post",
+                url: url,
+                success: function (res) {
+                    localStorage.removeItem('Access-Authorization');
+                    toAdminLogin();
+                }
+            });
+        })
+    }
+    
+
+    (()=>{
+        const auth = localStorage.getItem('Access-Authorization');
+        if(auth){
+            if(/login.html/.test(window.location.href)){
+                toAdminIndex();
+            }
+        }
+        else{
+            if(!/login.html/.test(window.location.href)){
+                toAdminLogin();
+            }
+        }
+    })();
+    
+</script>
+  
+      <script type="text/javascript">
+function initArticleType(types, parent_id, space, show, selectSort, type_id) {
+    selectSort = selectSort || 0;
+    type_id = type_id || '';
+    types.map(item => {
+        if (item.parent_id == parent_id) {
+            item.selectSort = selectSort++;
+            item.paddingLeft = (space.length * 15) + 'px';
+            if (item.type_id != type_id) {
+                item.title = space + item.title;
+                //item.show = show;
+                initArticleType(types, item.type_id, space + '--- ', show, selectSort, type_id);
+            }
+            else {
+                //item.show = 0;
+                initArticleType(types, item.type_id, space + '--- ', 0, selectSort, type_id);
+            }
+        }
+    })
+}
+
+function getArticleTypeAll(callback, curr_type_id){
+    getPort('/api/article/getPagingArticleType', (url)=>{
+        ajax({
+            method: 'get',
+            url: url,
+            data: {
+                index: 1,
+                size: 1000
+            },
+            success: (res, state, response) => {
+                if (res && res.data) {
+                    const datas = JSON.parse(JSON.stringify(res.data));
+                    initArticleType(datas, '', '', 1, 0, curr_type_id || '');
+                    const types = datas.sort((a, b) => a.selectSort < b.selectSort ? -1 : 1);
+                    callback(res.data, types);
+                }
+                else{
+                    callback([],[]);
+                }
+            }
+        })
+    });
+}
+</script>
+    
+      <script type="text/javascript">
+function getArticle(pagination, dataOption, callback){
+    getPort('/api/article/getPagingArticle', (url)=>{
+        
+        layer.load(2, {time:10*1000});
+
+        ajax({
+            method: 'get',
+            url: url,
+            data: {
+                index: pagination.page_index,
+                size : pagination.page_size,
+                type_id: dataOption.type_id,
+                article_id: dataOption.article_id
+            },
+            success: (res, state, response) => {
+                layer.closeAll();
+                if (res && res.data) {
+
+                    const pager = getPager(pagination.page_index, pagination.page_size, res.total)
+
+                    pagination.page_count = res.total;
+                    pagination.page_next = pager.page_next;
+                    pagination.page_prev = pager.page_prev;
+                    pagination.page_total = pager.page_total;
+                    pagination.pages = [];
+                    pagination.pages = pager.pages;
+
+                    callback(res.data)                    
+                }
+            }
+        })
+    });
+}
+</script>
+    
+      <script type="text/javascript">
+            (()=>{
+                $('body').attr('ms-controller','root');
+                $('body').addClass('ms-controller');
+
+                initController({
+                    $id: 'root',
+                    data: {
+                        types:[],
+                        typeTree:[],
+
+                        type_id: '',
+                        articles:[],
+                        articlePagination: Pager()
+
+
+                    },
+                    onload: function() {
+                        this.data.type_id = getUrlKeyValue('type_id');
+                        this.data.articlePagination.page_size = 12;
+                        this.getArticleTypeAll();
+                        this.getArticle(this.data.type_id);
+                    },
+                    getArticleTypeAll: function() {
+                        getArticleTypeAll((datas,dataTree)=>{
+                            this.data.types = datas;
+                            if(dataTree){
+                                this.data.typeTree = [];
+                                this.data.typeTree = dataTree.filter(p=>p.flag>0||!p.parent_id).sort((a,b)=>a.sort<b.sort?-1:1);
+                            }
+                        })
+                    },
+                    getArticleTypeName: function(type_id){
+                        if(!type_id) return '';
+                        return this.data.types.filter(item=>item.type_id == type_id).map(item=>{
+                            const parentTitle = this.getArticleTypeName(item.parent_id);
+                            return parentTitle + (parentTitle ? ' > ' : '') + item.title
+                        });
+                    },
+                    pageGo: function(num){
+                        this.data.articlePagination.page_index = num;
+                        this.getArticle(this.data.type_id);
+                    },
+                    getArticle: function(type_id){
+                        this.data.type_id = type_id || '';
+                        $('#menu_list').removeClass('i_d_block')
+                        
+                        getArticle(this.data.articlePagination, {type_id:this.data.type_id}, datas=>{
+                            this.data.articles = [];
+                            this.data.articles = datas;
+
+                            if(!datas || !datas.length){
+                                if(this.data.articlePagination.page_index > 1){
+                                    this.data.articlePagination.page_index = 1;
+                                    this.getArticle(type_id);
+                                }
+                            }
+                        })
+                    },
+                    toArticleContent: function(el){
+                        let url = '/admin/ArticleModuleContent.html';
+                        el && (url = url + '?article_id=' + el.article_id)
+                        window.location.href = url;
+                    },
+                    eventClickDel(e, el) {
+                        const index = layer.confirm("您确定要删除？", { title: '提示' }, () => {
+                            layer.close(index);
+
+                            getPort('/api/article/deleteArticle', (url) => {
+                                ajax({
+                                    method: 'get',
+                                    url: url,
+                                    data: {
+                                        article_id: el.article_id
+                                    },
+                                    success: (res, state, response) => {
+                                        res.message && layer.msg(res.message);
+                                        this.getArticle(this.data.type_id);
+                                    }
+                                });
+                            });
+                        })
+                    }
+                });
+            })()
+        </script>
+    </body>
+
+</html>
+

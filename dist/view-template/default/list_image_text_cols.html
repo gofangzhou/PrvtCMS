@@ -1,0 +1,31 @@
+<!-- @Register "master" to <v:master>  -->
+<!-- @Register "header" to <u:header>  -->
+<!-- @Register "footer" to <u:footer>  -->
+<!-- @Register "pager" to <u:pager>  -->
+    <v:master>
+        <master:bodyer>
+          <u:header></u:header>
+          <div class="container">
+              <div class="row">
+                  {%#news%}
+                  <div class="col-3 mb-3">
+                      <div class="card">
+                          <img src="{%cover_image%}" class="card-img-top">
+                          <div class="card-body">
+                            <h5 class="card-title">{%title%}</h5>
+                            <p class="card-text">{%description%}</p>
+                            <a href="{%link%}" class="btn btn-primary">Go</a>
+                          </div>
+                        </div>
+                  </div>
+                  {%/news%}
+              </div>
+          </div>
+          <div class="container">
+            <u:pager></u:pager>
+          </div>
+      
+          <u:footer></u:footer>
+        </master:bodyer>
+      </v:master>
+      

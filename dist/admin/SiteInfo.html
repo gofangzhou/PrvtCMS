@@ -1,0 +1,480 @@
+
+<!--
+@grx
+版本：v0.2.2
+时间：2009+
+作者：QB.B
+感谢：asp.net、typescript、nodejs、avalon、require.js、ast、jquery、bootstrap、layui、mustache...
+-->
+
+
+
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+  
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+    <title>后台管理</title>
+  
+    <link href="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/twitter-bootstrap/5.1.3/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+  
+    <link href="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/layui/2.6.8/css/layui.min.css" type="text/css" rel="stylesheet" />
+  
+    <script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/3.5.1/jquery.min.js" type="application/javascript"></script>
+  
+    <script src="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/layui/2.6.8/layui.min.js" type="application/javascript"></script>
+  
+      <link href="https://unpkg.com/@wangeditor/editor@latest/dist/css/style.css" rel="stylesheet" type="text/css" />
+    
+      <style type="text/css">
+        #container_ace_editor{width:100%;height:500px;}
+        </style>
+    <style type="text/css">
+.ms-controller{visibility:hidden;}
+.hidden{display:none !important;}
+
+html,body{min-width:1024px;}
+
+.container-breadcrumb{background-color:#edf6fa;line-height:2.5rem;}
+.container-breadcrumb .breadcrumb{margin-bottom:0;}
+.breadcrumb-item b{color:#333}
+
+.tablelist{border:solid 1px #cbcbcb; width:100%; clear:both;}
+.tablelist th{background:url(/statics/admin-xxglxtjm/images/th.gif) repeat-x; height:34px; line-height:34px; border-bottom:solid 1px #b6cad2; text-indent:11px; text-align:left;padding:0;white-space:nowrap;min-width:3.5rem}
+.tablelist td{line-height:35px; text-indent:11px; border-right: dotted 1px #c7c7c7;padding:0;white-space:nowrap;}
+.tablelink{color:#056dae;}
+.tablelist tbody tr.odd{background:#f5f8fa;}
+.tablelist tbody tr:hover{background:#e5ebee;}
+
+</style>
+<style type="text/css">
+
+</style>
+<style type="text/css">
+
+</style>
+<style type="text/css">
+
+</style>
+<style type="text/css">
+.col-form-label{text-align:right;}
+</style>
+<style type="text/css">
+
+</style>
+</head>
+
+  <body style="min-width:1024px;">
+      <div class="container-fluid container-breadcrumb">
+        <div class="row">
+          <div class="col">
+            <nav>
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                  <b>位置</b>
+                ：
+                  <a href="/admin/main.html">主功能面板</a>
+                </li>
+              
+                <li class="breadcrumb-item active">网站信息</li>
+              </ol>
+            </nav>
+          </div>
+        </div>
+      </div>
+    
+      <div class="container-fluid container-welcome mt-3">
+        <div class="accordion" id="accordionExample">
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        基本信息
+                    </button>
+            </h2>
+          
+            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                <div class="mb-3 row">
+                  <label class="col-2 col-form-label">单位名称</label>
+                  <div class="col">
+                      <input type="text" class="form-control" placeholder="请填写单位名称" ms-duplex="data.name" />
+                    </div>
+                </div>
+              
+                <div class="mb-3 row">
+                  <label class="col-2 col-form-label">单位简称</label>
+                  <div class="col">
+                      <input type="text" class="form-control" placeholder="请填写单位简称" ms-duplex="data.nick_name" />
+                    </div>
+                </div>
+
+                <div class="mb-3 row">
+                    <label class="col-2 col-form-label">站点名称</label>
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="请填写单位简称" ms-duplex="data.site_name" />
+                    </div>
+                </div>
+              
+                <div class="mb-3 row">
+                  <label class="col-2 col-form-label">logo</label>
+                
+                  <div class="col">
+                      <div class="row">
+                        <div class="col-xs-6 col-sm-4 col-md-3 col-lg-3" ms-for="($index_1, @el_1) in data.cover_images">
+                          <div class="card" style="width: 18rem;">
+                            <img ms-attr="{src: @el_1.url}" style="max-width:100%;max-height:100%;" class="card-img-top" />
+                          </div>
+                        </div>
+                      </div>
+                    
+                      <p>
+                        <input type="file" class="form-control" ms-change="fileChange($event, 0)" autocomplete="false" multiple="" />
+                      </p>
+                    </div>
+                
+                </div>
+              
+                <div class="mb-3 row">
+                  <label class="col-2 col-form-label">联系方式</label>
+                
+                  <div class="col">
+                      <input type="text" class="form-control" placeholder="请填写座机 / 手机号码" ms-duplex="data.tel" />
+                    </div>
+                
+                </div>
+              
+                <div class="mb-3 row">
+                  <label class="col-2 col-form-label">联系信息</label>
+                
+                  <div class="col">
+                      <textarea class="form-control" rows="6" placeholder="请填写网站底部单位联系信息" ms-duplex="data.contact_info"></textarea>
+                    </div>
+                
+                </div>
+              
+                <div class="mb-3 row">
+                  <label class="col-2 col-form-label">ICP备案编号</label>
+                
+                  <div class="col">
+                      <input type="text" class="form-control" placeholder="请填写ICP备案编号" ms-duplex="data.site_icp_regcode" />
+                    </div>
+                
+                </div>
+              
+                <div class="mb-3 row" style="display:none;">
+                  <label class="col-2 col-form-label">内容</label>
+                
+                  <div class="col">
+                      <script id="container_editor" name="content" type="text/plain"></script>
+                    
+                      <div id="container_wang_editor" style="border:1px solid #ddd;z-index:99999;">
+                        <div id="toolbar-container" style="border-bottom:1px solid #ddd;"></div>
+                      
+                        <div id="editor-container" style="height:500px"></div>
+                      </div>
+                    
+                      <div id="container_ace_editor"></div>
+                    </div>
+                
+                </div>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        <div class="btn-toolbar pt-2" role="toolbar">
+          <div class="d-grid gap-2 col-2">
+            <button class="btn btn-primary" type="button" ms-click="eventClickSave()">保存</button>
+          </div>
+        </div>
+      </div>
+    
+    <script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/twitter-bootstrap/5.1.3/js/bootstrap.bundle.min.js" type="application/javascript"></script>
+  
+    <script src="https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/avalon.js/2.2.7/avalon.min.js" type="application/javascript"></script>
+  
+    <script type="text/javascript">
+
+    var localed = false;
+
+    function ajax(e) {
+        var t;
+        if (e.url || e.success && e.success({
+            state: -1,
+            message: "请求链接为空！"
+        }),
+        !/^http/.test(e.url || "")) {
+            //var i = this.apiOrigin;
+            //e.url = i + e.url
+        }
+        var n = {};
+        n["Access-Authorization"] = localStorage.getItem("Access-Authorization"),
+        n.Accept = "*/*",
+        e.headers = n,
+        e.xhrFields = {
+            withCredentials: !0
+        };
+        var s = e.success;
+        e.success = function(e, t, i) {
+            e.state - 1 && layer.msg(e.message || "服务器连接超时或服务器错误！"),
+            s && s(e, t, i)
+        }
+        ;
+        var r = e.error;
+        e.error = function(e) {
+            if (401 == e.status)
+                return localStorage.removeItem("Access-Authorization");
+            layer.msg("服务器连接超时或服务器错误！"),
+            r && r(e)
+        }
+        ,
+        $.ajax(e)
+    }
+
+    function getUrlKeyValue(name){
+        return (window.location.href.match(new RegExp(`(?<=${name}=)[^\?\&]+`)) || [''])[0];
+    }
+
+    function getPort(url, callback){
+        if(localed){
+            callback(url);
+            return;
+        }
+        $.ajax({
+            type: "GET",
+            url: "/api/server/port",
+            success: function (res) {
+                var origin = window.location.origin.replace(/:\d+$/,'');
+                if(res && res.data){
+                    callback(origin+':'+res.data+url);
+                    return;
+                }
+                layer.alert('登录失败，请检查网络设置！');
+            },
+            error: function (msg) {
+                localed = true;
+                callback(url)
+            }
+        });
+    }
+
+    function initController(settings, data) {
+
+        // 检查控制器编号
+        settings.$id || (settings.$id = `controller_${new Date().getTime()}`);
+
+        if (settings.container) {
+            layer.msg(`视图容器未设定！`);
+            return;
+        }
+
+        // 获取视图
+        const view = `<div ms-controller="${settings.$id}" class="${settings.$id} ${settings.class || ''}">${settings._template}</div>`;
+
+        // 检查容器状态
+        if(settings._template){
+            if (settings.fillType === 'top') {
+                $(settings.container || '').html(view);
+            }
+            else {
+                $(settings.container).children().last().addClass('hidden');
+                $(settings.container).append(view);
+            }
+        }
+
+        settings.disabledFormControl = (dom, isCancel) => {
+            if (isCancel) {
+                $(dom).removeAttr('disabled');
+                return;
+            }
+            $(dom).attr('disabled', "disabled");
+        }
+
+        avalon.config.debug = true;
+        avalon.ready(() => {
+            const vm = avalon.define(settings).onload(data || undefined);
+            let vmTarget = $(`[ms-controller="${settings.$id}"]:eq(0)`).get(0);
+            avalon.scan(vmTarget, vm, undefined);
+        });
+    }
+
+    function toView(url){
+        window.location.href = url;
+    }
+    
+    function toAdminLogin(){
+        toView('/admin/login.html');
+    }
+
+    function toAdminIndex(){
+        toView('/admin/main.html');
+    }
+
+    function loginOut() {
+        getPort('/api/user/logout', function(url){
+            ajax({
+                type: "post",
+                url: url,
+                success: function (res) {
+                    localStorage.removeItem('Access-Authorization');
+                    toAdminLogin();
+                }
+            });
+        })
+    }
+    
+
+    (()=>{
+        const auth = localStorage.getItem('Access-Authorization');
+        if(auth){
+            if(/login.html/.test(window.location.href)){
+                toAdminIndex();
+            }
+        }
+        else{
+            if(!/login.html/.test(window.location.href)){
+                toAdminLogin();
+            }
+        }
+    })();
+    
+</script>
+  
+      <!-- 配置文件 -->
+      <script type="text/javascript" src="/statics/admin-xxglxtjm/libs/ueditor/ueditor.config.js"></script>
+    
+      <!-- 编辑器源码文件 -->
+      <script type="text/javascript" src="/statics/admin-xxglxtjm/libs/ueditor/ueditor.all.min.js"></script>
+    
+      <script src="https://unpkg.com/@wangeditor/editor@latest/dist/index.js" type="text/javascript"></script>
+    
+      <script src="https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/ace/1.4.14/ace.min.js" type="application/javascript"></script>
+    
+      <script src="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/ace/1.4.14/theme-twilight.min.js" type="application/javascript"></script>
+    
+      <script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/ace/1.4.14/mode-javascript.min.js" type="application/javascript"></script>
+    
+      <script src="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/ace/1.4.14/mode-html.min.js" type="application/javascript"></script>
+   
+      <script type="text/javascript">
+            (()=>{
+                $('body').attr('ms-controller','root');
+                $('body').addClass('ms-controller');
+
+                // 实例化编辑器
+                var g_ueditor;
+                var a_ueditor;
+
+                initController({
+                    $id: 'root',
+                    data: {
+                        name: '',
+                        nick_name: '',
+                        tel: '',
+                        address: '',
+                        contact_info: '',
+                        
+                        logo: '',
+                        logo2: '',
+                        cover_images: [],
+                        
+                        access_count: 0,
+                        access_count_cache: 0,
+
+                        site_name: '',
+                        site_icp_regcode: ''
+                    },
+                    onload: function() {
+                        this.getInfo();
+                        /*
+                        layui.laydate.render({
+                            elem: '#publish_datetime',
+                            type: 'datetime'
+                        });
+                        */
+                    },
+                    getInfo: function(article_id){
+                        getPort('/api/site/info', (url) => {
+                            ajax({
+                                method: 'post',
+                                url: url,
+                                data: {},
+                                success: (res, state, response) => {
+                                    const datas = res.data;
+                                    datas.forEach(element => {
+                                        this.data[element.key] = element.value;
+                                        if(element.key=='logo'){
+                                            this.data.cover_images.push({url:element.value});
+                                        }
+                                    });
+                                }
+                            })
+                        });
+                    },
+                    fileChange(e, type) {
+                        const list = (e.target).files;
+                        if (list.length) {
+                            const formData = new FormData();
+                            for (let index = 0; index < list.length; index++) {
+                                formData.append("mypic" + (index || ''), list[index]);
+                            }
+                            getPort('/api/upload', (url) => {
+                                ajax({
+                                    method: 'post',
+                                    url: url,
+                                    processData: false,
+                                    contentType: false,
+                                    data: formData,
+                                    success: (res, state, response) => {
+
+                                        if (type == "1") {
+
+                                        }
+                                        else {
+                                            this.data.cover_images = [];
+                                            this.data.cover_images = res.data;
+                                            res.data && res.data.length && (this.data.logo = res.data[0].url);
+                                        }
+                                    }
+                                })
+                            })
+                        }
+                    },
+                    eventClickSave(e) {
+                        e && this.disabledFormControl(e.target);
+                        getPort('/api/site/info/update', (url) => {
+                            const data = this.data.$model || this.data;
+                            ajax({
+                                method: 'post',
+                                url: url,
+                                data: {
+                                    list: Object.keys(data).map(key=>{
+                                        if(key == 'cover_images') key = 'logo';
+                                        return {
+                                            key: key,
+                                            value: data[key]
+                                        }
+                                    })
+                                },
+                                success: (res, state, response) => {
+                                    if (res.state == -1) {
+                                        this.disabledFormControl(e.target, true);
+                                        return;
+                                    }
+                                    window.location.href = '/admin/main.html';
+                                }
+                            })
+                        });
+                    }
+                });
+            })()
+        </script>
+    </body>
+
+</html>
+

@@ -1,0 +1,13 @@
+<nav aria-label="Page navigation example" class="mt-3">
+    <ul class="pagination justify-content-center">
+        <li class="page-item">
+        <a class="page-link" href="/content/{%type_id%}/{%pager.page_prev%}">上一页</a>
+        </li>
+        {%#pager.pages%}
+        <li class="page-item"><a class="page-link" href="/content/{%type_id%}/{%page_index%}">{%page_index_name%}</a></li>
+        {%/pager.pages%}
+        <li class="page-item">
+        <a class="page-link" href="/content/{%type_id%}/{%pager.page_next%}">下一页</a>
+        </li>
+    </ul>
+</nav>

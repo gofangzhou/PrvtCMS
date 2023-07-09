@@ -1,0 +1,23 @@
+<!-- @Register "master" to <v:master>  -->
+<!-- @Register "header" to <u:header>  -->
+<!-- @Register "footer" to <u:footer>  -->
+<!-- @Register "pager" to <u:pager>  -->
+    <v:master>
+        <master:bodyer>
+          <u:header></u:header>
+          <div class="container mt-3">
+            <div class="list-group">
+                {%#news%}
+                <a href="{%link%}" class="list-group-item list-group-item-action" aria-current="true">
+                    {%title%}
+                </a>
+                {%/news%}
+              </div>
+          </div>
+          <div class="container">
+            <u:pager></u:pager>
+          </div>  
+          <u:footer></u:footer>
+        </master:bodyer>
+      </v:master>
+      
